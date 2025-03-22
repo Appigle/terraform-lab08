@@ -1,3 +1,8 @@
+# List of supported availability zones in your region
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
 # NETWORKING
 resource "aws_vpc" "app" {
   cidr_block           = local.cidr_block_vpc

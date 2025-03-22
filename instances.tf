@@ -1,3 +1,8 @@
+# DATA
+data "aws_ssm_parameter" "amzn2_linux" {
+  name = local.amzn2_linux_ami_name
+}
+
 # INSTANCES
 resource "aws_instance" "nginx1" {
   ami           = nonsensitive(data.aws_ssm_parameter.amzn2_linux.value)
@@ -9,7 +14,6 @@ resource "aws_instance" "nginx1" {
 
   tags = var.resource_tags
 
-  # depends_on = [aws_iam_role_policy.allow_s3_access_to_ec2]
 
   user_data = <<EOF
 #! /bin/bash
@@ -39,7 +43,6 @@ resource "aws_instance" "nginx2" {
 
   tags = var.resource_tags
 
-  # depends_on = [aws_iam_role_policy.allow_s3_access_to_ec2]
   user_data = <<EOF
 #! /bin/bash
 sudo amazon-linux-extras install -y nginx1
