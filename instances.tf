@@ -21,7 +21,7 @@ resource "aws_instance" "nginx" {
     }
   )
 
-  user_data = templatefile("user_data.sh", {
+  user_data = templatefile("${path.module}/user_data.sh", {
     BUCKET_ID = aws_s3_bucket.web_bucket.id
   })
 }
