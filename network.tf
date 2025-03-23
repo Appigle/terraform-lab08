@@ -50,16 +50,10 @@ resource "aws_route_table" "public_route_table" {
   tags = var.resource_tags
 }
 
-locals {
-  public_subnets = {
-    for k, v in aws_subnet.public : k => v.id
-  }
-}
-
 resource "aws_route_table_association" "public" {
-  for_each = local.public_subnets
+  for_each = aws_subnet.public
 
-  subnet_id      = each.value
+  subnet_id      = each.value.id
   route_table_id = aws_route_table.public_route_table.id
 }
 
@@ -82,9 +76,7 @@ resource "aws_security_group" "public_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
-    Name = "allow_tls"
-  }
+  tags = var.resource_tags
 }
 
 resource "aws_security_group" "load_balancer_security_group" {
