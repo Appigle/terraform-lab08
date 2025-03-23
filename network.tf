@@ -16,18 +16,25 @@ resource "aws_internet_gateway" "internet_gateway" {
   tags = var.resource_tags
 }
 
-resource "aws_subnet" "public_subnet" {
-  vpc_id                  = aws_vpc.app.id
-  availability_zone       = data.aws_availability_zones.available.names[0]
-  cidr_block              = var.public_subnet_cidr_blocks[0]
-  map_public_ip_on_launch = local.map_public_ip_on_launch
-  tags                    = var.resource_tags
+locals {
+  public_subnet_configs = {
+    subnet1 = {
+      az_index = 0
+      cidr_index = 0
+    }
+    subnet2 = {
+      az_index = 1
+      cidr_index = 1
+    }
+  }
 }
 
-resource "aws_subnet" "public_subnet2" {
+resource "aws_subnet" "public" {
+  for_each = local.public_subnet_configs
+
   vpc_id                  = aws_vpc.app.id
-  availability_zone       = data.aws_availability_zones.available.names[1]
-  cidr_block              = var.public_subnet_cidr_blocks[1]
+  availability_zone       = data.aws_availability_zones.available.names[each.value.az_index]
+  cidr_block              = var.public_subnet_cidr_blocks[each.value.cidr_index]
   map_public_ip_on_launch = local.map_public_ip_on_launch
   tags                    = var.resource_tags
 }
@@ -43,13 +50,16 @@ resource "aws_route_table" "public_route_table" {
   tags = var.resource_tags
 }
 
-resource "aws_route_table_association" "public_subnet_route_table" {
-  subnet_id      = aws_subnet.public_subnet.id
-  route_table_id = aws_route_table.public_route_table.id
+locals {
+  public_subnets = {
+    for k, v in aws_subnet.public : k => v.id
+  }
 }
 
-resource "aws_route_table_association" "public_subnet2_route_table" {
-  subnet_id      = aws_subnet.public_subnet2.id
+resource "aws_route_table_association" "public" {
+  for_each = local.public_subnets
+
+  subnet_id      = each.value
   route_table_id = aws_route_table.public_route_table.id
 }
 
