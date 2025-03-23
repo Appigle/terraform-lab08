@@ -15,6 +15,7 @@ expressions, and dynamic infrastructure management to a real-world app scenario.
 ├── inputs.tf
 ├── outputs.tf
 ├── provider.tf
+├── user_data.sh
 └── webcontent/
 ```
 
@@ -150,6 +151,5 @@ This task focuses on making configurations more modular and dynamic:
    - Purpose: Improve maintainability and reusability
    - Functionality: Separates concerns into different files
    - Implementation: User Data Script: `user_data.sh`
-
 
 These help us create infrastructure that maintainable and scalable. Making our code easier to understand, modify, and extend as our needs evolve.
