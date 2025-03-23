@@ -31,18 +31,18 @@ terraform destroy
 
 ## Features
 
-### 1. Advanced Loop Constructs
+### 1. Advanced Loop Constructs: Count vs For-each
 
-#### Count-based Resource Creation
+- `Count`: Best for identical resources
 
-```hcl
-resource "aws_instance" "nginx" {
-  count = 2  # Creates 2 identical instances
-  # ... instance configuration
-}
-```
+  ```hcl
+  resource "aws_instance" "nginx" {
+    count = 2  # Creates 2 identical instances
+    # ... instance configuration
+  }
+  ```
 
-#### For-each Resource Creation
+- `For-each`: Better for unique resources
 
 ```hcl
 resource "aws_security_group" "groups" {
@@ -150,25 +150,6 @@ This task focuses on making configurations more modular and dynamic:
    - Purpose: Improve maintainability and reusability
    - Functionality: Separates concerns into different files
    - Implementation: User Data Script: `user_data.sh`
-
-### Count vs For-each
-
-- `Count`: Best for identical resources
-
-  ```hcl
-  resource "aws_instance" "nginx" {
-    count = 2
-    # ...
-  }
-  ```
-
-- `For-each`: Better for unique resources
-  ```hcl
-  resource "aws_security_group" "groups" {
-    for_each = local.security_groups
-    # ...
-  }
-  ```
 
 
 These help us create infrastructure that maintainable and scalable. Making our code easier to understand, modify, and extend as our needs evolve.
