@@ -3,9 +3,19 @@ data "aws_ssm_parameter" "amzn2_linux" {
   name = local.amzn2_linux_ami_name
 }
 
+locals {
+  # Use min function to ensure we don't exceed available subnets
+  instance_count = min(2, length(data.aws_availability_zones.available.names))
+  
+  # Generate instance names using string functions
+  instance_names = [
+    for i in range(local.instance_count) : upper("nginx-${i + 1}")
+  ]
+}
+
 # INSTANCES
 resource "aws_instance" "nginx" {
-  count = 2  # Number of instances to create
+  count = local.instance_count
 
   ami           = nonsensitive(data.aws_ssm_parameter.amzn2_linux.value)
   instance_type = "t3.micro"
@@ -17,7 +27,7 @@ resource "aws_instance" "nginx" {
   tags = merge(
     var.resource_tags,
     {
-      Name = "nginx-${count.index + 1}"
+      Name = local.instance_names[count.index]
     }
   )
 
