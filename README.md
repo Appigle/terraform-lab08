@@ -170,24 +170,5 @@ This task focuses on making configurations more modular and dynamic:
   }
   ```
 
-### Functions/Modular in Infrastructure as Code
-
-1. String Functions
-
-   - Keep resource names consistent
-   - Example: Converting bucket names to lowercase for AWS compatibility
-
-2. Collection Functions
-
-   - Handle multiple resources efficiently
-   - Example: Determining the number of available subnets based on AZs
-
-3. Dynamic Expressions
-
-   - Make configurations adapt to changing needs
-   - Example: Adjusting resource counts based on environment variables
-
-4. Modular Design
-   - Break down complex infrastructure into manageable pieces
 
 These help us create infrastructure that maintainable and scalable. Making our code easier to understand, modify, and extend as our needs evolve.
