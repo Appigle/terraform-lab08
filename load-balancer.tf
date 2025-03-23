@@ -3,7 +3,7 @@ resource "aws_lb" "nginx" {
   name               = "prog8830-lb-tf"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.load_balancer_security_group.id]
+  security_groups    = [aws_security_group.groups["load_balancer"].id]
   subnets            = [for subnet in aws_subnet.public : subnet.id]
 
   enable_deletion_protection = false

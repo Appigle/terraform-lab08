@@ -10,7 +10,7 @@ resource "aws_instance" "nginx1" {
 
   iam_instance_profile   = aws_iam_instance_profile.nginx_profile.name
   subnet_id              = aws_subnet.public["subnet1"].id
-  vpc_security_group_ids = [aws_security_group.public_security_group.id]
+  vpc_security_group_ids = [aws_security_group.groups["public"].id]
 
   tags = var.resource_tags
 
@@ -39,7 +39,7 @@ resource "aws_instance" "nginx2" {
 
   iam_instance_profile   = aws_iam_instance_profile.nginx_profile.name
   subnet_id              = aws_subnet.public["subnet2"].id
-  vpc_security_group_ids = [aws_security_group.public_security_group.id]
+  vpc_security_group_ids = [aws_security_group.groups["public"].id]
 
   tags = var.resource_tags
 

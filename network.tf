@@ -9,7 +9,6 @@ resource "aws_vpc" "app" {
   enable_dns_hostnames = true
 }
 
-
 resource "aws_internet_gateway" "internet_gateway" {
   vpc_id = aws_vpc.app.id
 
@@ -25,6 +24,33 @@ locals {
     subnet2 = {
       az_index = 1
       cidr_index = 1
+    }
+  }
+
+  security_groups = {
+    public = {
+      name        = "public_security_group"
+      description = "Security group for public subnets"
+      ingress_rules = [
+        {
+          from_port   = 80
+          to_port     = 80
+          protocol    = "tcp"
+          cidr_blocks = ["0.0.0.0/0"]
+        },
+      ]
+    }
+    load_balancer = {
+      name        = "load_balancer_security_group"
+      description = "Security group for load balancer"
+      ingress_rules = [
+        {
+          from_port   = 80
+          to_port     = 80
+          protocol    = "tcp"
+          cidr_blocks = ["0.0.0.0/0"]
+        },
+      ]
     }
   }
 }
@@ -57,38 +83,21 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public_route_table.id
 }
 
-resource "aws_security_group" "public_security_group" {
-  name        = "public_security_group"
-  description = "aws_security_group"
+resource "aws_security_group" "groups" {
+  for_each = local.security_groups
+
+  name        = each.value.name
+  description = each.value.description
   vpc_id      = aws_vpc.app.id
 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [local.cidr_block_vpc]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = var.resource_tags
-}
-
-resource "aws_security_group" "load_balancer_security_group" {
-  name        = "load_balancer_security_grouo"
-  description = "aws_security_group"
-  vpc_id      = aws_vpc.app.id
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+  dynamic "ingress" {
+    for_each = each.value.ingress_rules
+    content {
+      from_port   = ingress.value.from_port
+      to_port     = ingress.value.to_port
+      protocol    = ingress.value.protocol
+      cidr_blocks = ingress.value.cidr_blocks
+    }
   }
 
   egress {
