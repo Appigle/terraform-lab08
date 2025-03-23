@@ -34,17 +34,10 @@ resource "aws_lb_listener" "front_end" {
   tags = var.resource_tags
 }
 
-locals {
-  nginx_instances = {
-    nginx1 = aws_instance.nginx1.id
-    nginx2 = aws_instance.nginx2.id
-  }
-}
-
 resource "aws_lb_target_group_attachment" "nginx" {
-  for_each = local.nginx_instances
+  count = length(aws_instance.nginx)
 
   target_group_arn = aws_lb_target_group.nginx_target_group.arn
-  target_id        = each.value
+  target_id        = aws_instance.nginx[count.index].id
   port             = 80
 }
