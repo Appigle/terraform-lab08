@@ -1,4 +1,5 @@
-
+#defining the variables for them to be used dynamically
+#This variable is used to define resource tags that will be applied to AWS resources for better identification and organization.
 variable "resource_tags" {
   type      = map(string)
   sensitive = false
