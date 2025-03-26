@@ -1,6 +1,30 @@
+# Overview
+
+This Terraform project is structured using modules to create a web application infrastructure with the following components:
+
+VPC & Subnets
+
+Security Groups
+
+Compute Instances
+
+Load Balancer
+
+Database Instance
+
+This lab demonstrates the use of loops, functions, expressions, and modularization in Terraform.
+
+# Prerequisites
+
+Terraform CLI installed (>=1.3.0)
+
+AWS CLI configured with proper credentials
+
+GitHub account for repository management
+
 # Terraform Advanced Features in Action
 
-In this assignment, I applied Terraform's advanced features such as loops, functions,
+In this assignment, we applied Terraform's advanced features such as loops, functions,
 expressions, and dynamic infrastructure management to a real-world app scenario.
 
 ## Project Structure
@@ -153,3 +177,13 @@ This task focuses on making configurations more modular and dynamic:
    - Implementation: User Data Script: `user_data.sh`
 
 These help us create infrastructure that maintainable and scalable. Making our code easier to understand, modify, and extend as our needs evolve.
+
+# Lessons Learned
+
+The difference between count and for_each.
+
+How functions simplify Terraform configurations.
+
+The importance of modularization in Infrastructure as Code (IaC).
+
+
